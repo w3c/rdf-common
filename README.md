@@ -1,5 +1,4 @@
 
-# Specification 'rdf-common'
+# Common files for RDF specifications
 
-This is the repository for rdf-common. You're welcome to contribute! Let's make the Web rock our socks
-off!
+This repository is meant to be used as a submodule in multiple repository holding RDF and SPARQL specifications.
