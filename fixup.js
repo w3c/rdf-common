@@ -1,12 +1,13 @@
 require(["core/pubsubhub"], (respecEvents) => {
   respecEvents.sub('end-all', (documentElement) => {
-    // remove data-cite on where the citation is to ourselves.
+    // remove data-cite where the citation is to ourselves.
     const selfCites = Array.from(document.querySelectorAll(`a[data-cite^='${respecConfig.shortName}' i]`));
     for (const anchor of selfCites) {
       const text = anchor.text + ' (this document)';
       const citeParent = anchor.parentNode.parentNode;
-      citeParent.removeChild(anchor.parentNode);
-      citeParent.textContent = text;
+      const textSpan = document.createElement('span');
+      textSpan.textContent = text;
+      citeParent.replaceChild(textSpan, anchor.parentNode);
     }
 
     // Add highlighting and remove comment from pre elements
@@ -27,12 +28,12 @@ function _esc(s) {
     .replace(/</g,'&lt;');
 }
 
-function updateExample(doc, content) {
+function updateExample(utils, content) {
   // perform transformations to make it render and prettier
-  return _esc(unComment(doc, content));
+  return _esc(unComment(utils, content));
 }
 
-function unComment(doc, content) {
+function unComment(utils, content) {
   // perform transformations to make it render and prettier
   return content
     .replace(/<!--/, '')
@@ -40,4 +41,13 @@ function unComment(doc, content) {
     .replace(/< !\s*-\s*-/g, '<!--')
     .replace(/-\s*- >/g, '-->')
     .replace(/-\s*-\s*&gt;/g, '--&gt;');
+}
+
+// If content is a self-citation, replace it with the document name
+function noSelfCite(utils, content) {
+  if (content.toUpperCase() === `[[[${respecConfig.shortName}]]]`.toUpperCase()) {
+    return respecConfig.title + '(this document)';
+  } else {
+    return content;
+  }
 }
