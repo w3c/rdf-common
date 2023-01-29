@@ -26,6 +26,17 @@ var localBibliography = {
     status: "Conference Proceeding",
     publisher: "Journal of Web Semantics"
   },
+  SAFETY: {
+    title: "Saftety of recursive horn clauses with infinite relations",
+    href: "http://arxiv.org/abs/cs.LO/9809032",
+    authors: [
+      "R. Ramakrishnan",
+      "F. Bancilhon",
+      "A. Silberschatz"
+    ],
+    date: "1987",
+    publisher: "ACM New York"
+  },
   STRIPEDRDF: {
     id: "STRIPEDRDF",
     title: "RDF: Understanding the Striped RDF/XML Syntax",
