@@ -57,9 +57,12 @@ https.get(groupOptions, (res) => {
 
         if (sortedUsers.length === 1) {
           console.log(`The sole member of the ${groupName} Group was ${sortedUsers[0]}.`);
-        } else if (sortedUsers.length > 1) {
+        } else if (sortedUsers.length === 2) {
+          const joinedUsers = sortedUsers.join(' and ');
+          console.log(`Members of the ${groupName} Group included ${joinedUsers}.`);
+        } else {
           const joinedUsers = sortedUsers.slice(0, -1).join(', ');
-          console.log(`Members of the ${groupName} Group included ${joinedUsers} and ${sortedUsers[sortedUsers.length - 1]}.`);
+          console.log(`Members of the ${groupName} Group included ${joinedUsers}, and ${sortedUsers[sortedUsers.length - 1]}.`);
         }
       });
     }).on('error', (err) => {
