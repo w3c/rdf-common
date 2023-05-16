@@ -85,7 +85,18 @@ var localBibliography = {
     "status": "DNOTE",
     "publisher": "W3C"
   },
-  "SPARQL12-NEW": {
+  "RDF12-PRIMER": {
+    "authors": [
+        "Guus Schreiber",
+        "Yves Raimond"
+    ],
+    "href": "https://w3c.github.io/rdf-primer/spec/",
+    "title": "RDF 1.2 Primer",
+    "rawDate": "2022-01-01",
+    "status": "DNOTE",
+    "publisher": "W3C"
+  },
+ "SPARQL12-NEW": {
     "authors": [
         "The W3C RDF-star Working Group"
     ],
