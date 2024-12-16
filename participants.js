@@ -51,14 +51,23 @@ https.get(groupOptions, (res) => {
       res.on('end', () => {
         const users = JSON.parse(userData)._links.users.map(u => u.title);
 
+        // Find the maximum length of the first part (before the space)
+        const maxLength = Math.max(...users.map(user => user.split(" ")[0].length));
+
+        // Right-align the first component and format the strings
+        const alignedUsers = users.map(user => {
+          const [first, ...rest] = user.split(" ");
+          return first.padStart(maxLength, " ") + " " + rest.join(" ");
+        });
+
         if (users.length === 1) {
           console.log(`The sole member of the ${groupName} Group was ${users[0]}.`);
         } else if (users.length === 2) {
           const joinedUsers = users.join(' and ');
           console.log(`Members of the ${groupName} Group included ${joinedUsers}.`);
         } else {
-          const joinedUsers = users.slice(0, -1).join(', ');
-          console.log(`Members of the ${groupName} Group included ${joinedUsers}, and ${users[users.length - 1]}.`);
+          const joinedUsers = alignedUsers.slice(0, -1).join(",\n");
+          console.log(`Members of the ${groupName} Group included\n${joinedUsers}, and\n${alignedUsers[users.length - 1]}.`);
         }
       });
     }).on('error', (err) => {
