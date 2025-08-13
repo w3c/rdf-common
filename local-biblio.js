@@ -86,6 +86,16 @@ var localBibliography = {
     "status": "DNOTE",
     "publisher": "W3C"
   },
+  "RDF12-INTEROP": {
+    "authors": [
+        "Pierre-Antoine Champin"
+    ],
+    "href": "https://w3c.github.io/rdf-interop/spec/",
+    "title": "RDF 1.2 Primer",
+    "rawDate": "2025-06-27",
+    "status": "DNOTE",
+    "publisher": "W3C"
+  },
  "SPARQL12-NEW": {
     "authors": [
         "The W3C RDF &amp; SPARQL Working Group"
