@@ -1,5 +1,4 @@
-require(["core/pubsubhub"], (respecEvents) => {
-  respecEvents.sub('end-all', (documentElement) => {
+function postProcess() {
     // remove data-cite where the citation is to ourselves.
     const selfCites = Array.from(document.querySelectorAll(`a[data-cite^='${respecConfig.shortName}' i]`));
     for (const anchor of selfCites) {
@@ -18,8 +17,13 @@ require(["core/pubsubhub"], (respecEvents) => {
         .replace(/####([^#]*)####/g, '<span class="comment">$1</span>');
       pre.innerHTML = content;
     }
-  });
-});
+}
+
+if (document.respec) {
+  document.respec.ready.then(postProcess);
+} else {
+  document.addEventListener("DOMContentLoaded", postProcess);
+}
 
 function _esc(s) {
   return s.replace(/&/g,'&amp;')
