@@ -13,7 +13,7 @@ var module = module ? module : {};     // shim for browser use
 
 function hljsDefineTrig(hljs) {
   const KEYWORDS = {
-    keyword: 'base|10 prefix|10 @base|10 @prefix|10 graph',
+    keyword: 'base|10 prefix|10 version|10 @base|10 @prefix|10 @version|10 graph',
     literal: 'true|0 false|0',
     built_in: 'a|0'
   };
