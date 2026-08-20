@@ -27,15 +27,15 @@ function hljsDefineSparql(hljs) {
     relevance: 0,
   };
 
-
   return {
     case_insensitive: true,
     keywords: KEYWORDS,
     aliases: ['sparql', 'rql', 'rq', 'ru'],
     contains: [
+      ttl.REIFIED_TRIPLE,
       ttl.LANGTAG,
       ttl.DATATYPE,
-      //ttl.IRI_TERM,  // TODO: why does this prevent highlighting?
+      ttl.IRI_TERM,
       ttl.BLANK_NODE,
       ttl.PNAME,
       VARIABLE,
@@ -45,6 +45,8 @@ function hljsDefineSparql(hljs) {
       ttl.APOS_STRING_LITERAL,
       ttl.NUMBER,
       hljs.HASH_COMMENT_MODE,
+      ttl.ANNOTATION,
+      ttl.NAMED_ANNOT,
     ]
   };
 }

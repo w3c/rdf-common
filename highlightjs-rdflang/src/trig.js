@@ -21,7 +21,7 @@ function hljsDefineTrig(hljs) {
   const IRI_TERM = {
     className: 'literal',
     relevance: 1, // XML tags look also like relative IRIs
-    begin: /</,
+    begin: /<(?!\s)/,  // avoid shadowing operator in extensions (e.g. SPARQL)
     end: />/,
     illegal: /[\x00-\x20<>"{}|^`]/,
   };
@@ -144,6 +144,9 @@ function hljsDefineTrig(hljs) {
       GRAPH_BLOCK,
     ]),
     exports: {
+      ANNOTATION,
+      NAMED_ANNOT,
+      REIFIED_TRIPLE,
       LANGTAG,
       DATATYPE,
       IRI_TERM,
