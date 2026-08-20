@@ -27,24 +27,7 @@ function hljsDefineSparql(hljs) {
     relevance: 0,
   };
 
-  var JSON_QUOTE_STRING = {
-    begin: /"""\s*\{/,          // TODO why can't I write (?=\{)
-    end: /"""/,
-    subLanguage: 'json',
-    excludeBegin: true,
-    excludeEnd: true,
-    relevance: 0,
-  };
-  
-  var JSON_APOS_STRING = {
-    begin: /'''\s*\{/,          // TODO why can't I write (?=\{)
-    end: /'''/,
-    subLanguage: 'json',
-    excludeBegin: true,
-    excludeEnd: true,
-    relevance: 0,
-  };
-  
+
   return {
     case_insensitive: true,
     keywords: KEYWORDS,
@@ -56,8 +39,6 @@ function hljsDefineSparql(hljs) {
       ttl.BLANK_NODE,
       ttl.PNAME,
       VARIABLE,
-      JSON_QUOTE_STRING, // order matters
-      JSON_APOS_STRING,
       ttl.TRIPLE_QUOTE_STRING,
       ttl.TRIPLE_APOS_STRING,
       ttl.QUOTE_STRING_LITERAL,
