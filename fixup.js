@@ -55,3 +55,33 @@ function noSelfCite(utils, content) {
     return content;
   }
 }
+
+// Based on:
+// - <https://respec.org/docs/#load-additional-languages>
+// - <https://github.com/speced/respec/blob/main/tests/spec/core/highlight.html>
+function highlightLoader(lang, langURL, propName) {
+  langURL = new URL(langURL, window.location).href;
+  return async function () {
+    const worker = await document.respec.worker;
+    const action = "highlight-load-lang";
+    let langScript;
+    try {
+      const response = await fetch(langURL);
+      if (response.ok) {
+        langScript = await response.text();
+      }
+    } catch {
+      // Fall back to langURL if fetch fails
+    }
+    worker.postMessage({ action, langScript, langURL, propName, lang });
+    return new Promise(resolve => {
+      worker.addEventListener("message", function listener({ data }) {
+        const { action: responseAction, lang: responseLang } = data;
+        if (responseAction === action && responseLang === lang) {
+          worker.removeEventListener("message", listener);
+          resolve();
+        }
+      });
+    });
+  }
+}

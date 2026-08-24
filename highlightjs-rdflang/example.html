@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title>RDF 1.2 Highlight Examples</title>
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove"></script>
+  <!-- IMPORTANT: When using these in other spec/note documents, ensure to
+    replace all relative (`../`) paths below with the full base URL of this
+    repository (`https://w3c.github.io/rdf-common/`). -->
+  <script src="../local-biblio.js" class="remove"></script>
+  <script src="../fixup.js" class="remove"></script>
+  <script class='remove'>
+    var respecConfig = {
+      specStatus:  "DNOTE",
+      group: "wg/rdf-star",
+      noRecTrack: true,
+      localBiblio: localBibliography,
+      shortName: "rdf12-common-highlight-example",
+      copyrightStart: "2026",
+      editors:  [
+        { name: "Niklas Lindström", w3cid: "44656" }
+      ],
+
+      preProcess: [
+        highlightLoader("trig", "../highlightjs-rdflang/src/trig.js", "hljsDefineTrig"),
+        highlightLoader("sparql", "../highlightjs-rdflang/src/sparql.js", "hljsDefineSparql")
+      ]
+    };
+  </script>
+</head>
+
+<section id="abstract">
+  This document is exemplifies use of RDF syntax highlighting.
+</section>
+<section id="sotd">
+</section>
+
+<section id="highlight-examples">
+  <h2>Examples</h2>
+  <div>
+    <pre class="example trig" title="TriG Example"
+        data-include="test/document-01.trig" data-include-format="text"></pre>
+  </div>
+  <div>
+    <pre class="example sparql" title="SPARQL Example 1"
+        data-include="test/select-01.rq" data-include-format="text"></pre>
+  </div>
+  <div>
+    <pre class="example sparql" title="SPARQL Example 2"
+        data-include="test/construct-01.rq" data-include-format="text"></pre>
+  </div>
+</section>
+<body>
+</body></html>
