@@ -1,0 +1,69 @@
+# A TriG document with lots of variation.
+
+VERSION "1.2"
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix wd: <http://www.wikidata.org/entity/>
+Prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+BASE <http://example.org/>
+
+<> a foaf:Document ;
+  dct:title "A document" ;
+  dct:identifier 123 .
+
+<bob#me> foaf:topic_interest wd:Q12418 .
+
+<books/html_and_css> a bibo:Book ;
+    dct:title "HTML & CSS: Designing and Creating Websites"@en ,
+              "HTML و CSS: تصميم و إنشاء مواقع الويب"@ar--rtl .
+
+# A blank node with a list.
+[ a bibo:Document ; bibo:authorList ( <bob#me> <alice#me> ) ] .
+
+# Explicit default graph block
+{
+
+  [] foaf:topic_interest [
+            dct:title "Mona Lisa" ;
+            dct:creator <http://dbpedia.org/resource/Leonardo_da_Vinci> ] .
+
+  <bob#me> foaf:topic_interest wd:Q12418 {| a prov:Influence ;
+                                          dct:date "1998-10-04"^^xsd:date |} .
+
+}
+
+GRAPH <graph1> {
+
+  << <bob#me> foaf:topic_interest wd:Q12418 >>
+      a rdf:Statement ;
+      dct:date "2004-01-12"^^xsd:date ;  # end-of-line comment
+      dct:creator <alice#me> .
+
+  # Commented out
+  #<< <bob#me> foaf:topic_interest wd:Q12418 >>
+  #    a rdf:Statement ;
+  #    dct:date "2004-01-12"^^xsd:date ;
+  #    dct:creator <alice#me> .
+
+}
+
+GRAPH <graph2> {
+
+  <bob#me> foaf:topic_interest wd:Q12418 ~ <bob#interest-1>
+                                      ~ <alice#claim-1> .
+
+  <bob#interest-1>
+      a prov:Influence ;
+      dct:date "1998-10-04"^^xsd:date .
+
+  <alice#claim-1>
+      a rdf:Statement ;
+      dct:date "2004-01-12"^^xsd:date ;
+      dct:creator <alice#me> .
+
+}
+
+[] rdf:reifies <<( <bob#me> foaf:topic_interest _:other )>> .

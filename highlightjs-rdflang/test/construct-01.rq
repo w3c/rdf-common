@@ -1,0 +1,73 @@
+PREFIX : <http://www.w3.org/2006/time#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+
+  ?s ?p ?matchedform .
+
+  ?timeurn a ?type ;
+    owl:sameAs ?time ;
+    :inXSDDate ?datevalue ;
+    :hour ?hours ;
+    :minute ?minutes ;
+    :second ?seconds ;
+    :timeZone ?tzNode .
+
+  ?dateurn a xsd:date ;
+    owl:sameAs ?datevalue ;
+    :year ?year ;
+    :month ?month ;
+    :day ?day .
+
+  ?tzNode a :TimeZone ;
+    rdf:value ?tz, ?timezone .
+
+} WHERE {
+
+  {
+    ?s ?p ?time .
+    BIND(DATATYPE(?time) AS ?type)
+    FILTER(?type IN (xsd:dateTimeStamp, xsd:dateTime))
+    BIND(?time AS ?hasdate)
+    BIND(IRI(CONCAT('urn:tdb:2025:urn:sha:',
+                    SHA256(CONCAT(STR(?time),
+                    '^^', STR(?type))))) AS ?timeurn)
+  } UNION {
+    ?s ?p ?date .
+    BIND(DATATYPE(?date) AS ?type)
+    FILTER(?type = xsd:date)
+    BIND(?date AS ?hasdate)
+  }
+
+  BIND(STR(YEAR(?hasdate)) AS ?ystr)
+  BIND(STRDT(?ystr, xsd:gYear) AS ?year)
+
+  BIND(CONCAT(IF(MONTH(?hasdate) < 10, "0", ""), STR(MONTH(?hasdate))) AS ?mstr)
+  BIND(STRDT(CONCAT("--", ?mstr), xsd:gMonth) AS ?month)
+
+  BIND(CONCAT(IF(DAY(?hasdate) < 10, "0", ""), STR(DAY(?hasdate))) AS ?dstr)
+  BIND(STRDT(CONCAT("---", ?dstr), xsd:gDay) AS ?day)
+
+  BIND(COALESCE(?date, STRDT(CONCAT(?ystr, '-', ?mstr, '-', ?dstr),
+                                    xsd:date)) AS ?datevalue)
+
+  BIND(IRI(CONCAT('urn:tdb:2025:urn:sha:',
+                  SHA256(CONCAT(?ystr, '-', ?mstr, '-', ?dstr,
+                  '^^', STR(xsd:date))))) AS ?dateurn)
+
+  BIND(STRDT(STR(HOURS(?time)), xsd:nonNegativeInteger) AS ?hours)
+  BIND(STRDT(STR(MINUTES(?time)), xsd:nonNegativeInteger) AS ?minutes)
+  BIND(SECONDS(?time) AS ?seconds)
+
+  BIND(TZ(?time) AS ?tz)
+  BIND(TIMEZONE(?time) AS ?timezone)
+
+  BIND(IRI(CONCAT('urn:tdb:2025:urn:sha:',
+                  SHA256(CONCAT(STR(?timezone),
+                  '^^', STR(:TimeZone))))) AS ?tzNode)
+
+  BIND(IF(BOUND(?time), ?timeurn, ?dateurn) AS ?matchedform)
+
+}
