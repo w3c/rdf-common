@@ -13,7 +13,7 @@ Based on:
 var module = module ? module : {};     // shim for browser use
 
 function hljsDefineSparql(hljs) {
-  var ttl = hljs.getLanguage('trig').exports;
+  var trig = hljs.getLanguage('trig').exports;
   var KEYWORDS = {
     keyword: 'base|10 prefix|10 version|10 @base|10 @prefix|10 @version|10 add all as|0 ask bind by|0 clear construct|10 copy move create data default define delete describe distinct drop exists filter from|0 graph|10 group having in|0 insert limit load minus named|10 not offset optional order reduced select|0 service silent to union using values where with|0',
     name: 'abs asc avg bound ceil coalesce concat contains strbefore count day hours desc encode_for_uri floor group_concat if|0 iri isblank isiri isliteral isnumeric isuri lang langdir haslang haslangdir datatype langmatches lcase max md5 min|0 minutes month now rand regex replace round sameterm sample seconds separator sha1 sha256 sha384 sha512 str strafter strdt strends strlang strlangdir strlen strstarts struuid substr sum then timezone tz ucase uri bnode uuid year triple subject predicate object istriple',
@@ -27,27 +27,33 @@ function hljsDefineSparql(hljs) {
     relevance: 0,
   };
 
+  const LIST = Object.assign({}, trig.LIST, {className: 'meta'});
+
+  const CONTAINS = [
+    trig.LANGTAG,
+    trig.DATATYPE,
+    trig.IRI_TERM,
+    trig.BLANK_NODE_TERM,
+    trig.PNAME,
+    VARIABLE,
+    trig.TRIPLE_QUOTE_STRING,
+    trig.TRIPLE_APOS_STRING,
+    trig.QUOTE_STRING_LITERAL,
+    trig.APOS_STRING_LITERAL,
+    trig.NUMBER,
+    hljs.HASH_COMMENT_MODE,
+    trig.PUNCTUATION,
+    trig.REIFICATION,
+    trig.BLANK_NODE,
+    LIST,
+    trig.BLOCK,
+  ];
+
   return {
     case_insensitive: true,
     keywords: KEYWORDS,
     aliases: ['sparql', 'rql', 'rq', 'ru'],
-    contains: [
-      ttl.REIFIED_TRIPLE,
-      ttl.LANGTAG,
-      ttl.DATATYPE,
-      ttl.IRI_TERM,
-      ttl.BLANK_NODE,
-      ttl.PNAME,
-      VARIABLE,
-      ttl.TRIPLE_QUOTE_STRING,
-      ttl.TRIPLE_APOS_STRING,
-      ttl.QUOTE_STRING_LITERAL,
-      ttl.APOS_STRING_LITERAL,
-      ttl.NUMBER,
-      hljs.HASH_COMMENT_MODE,
-      ttl.ANNOTATION,
-      ttl.NAMED_ANNOT,
-    ]
+    contains: CONTAINS
   };
 }
 

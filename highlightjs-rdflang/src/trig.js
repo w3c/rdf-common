@@ -13,7 +13,8 @@ var module = module ? module : {};     // shim for browser use
 
 function hljsDefineTrig(hljs) {
   const KEYWORDS = {
-    keyword: 'base|10 prefix|10 version|10 @base|10 @prefix|10 @version|10 graph',
+    $pattern: /@?\w+/,
+    keyword: '@base|10 @prefix|10 @version|10 base|10 prefix|10 version|10 graph',
     literal: 'true|0 false|0',
     built_in: 'a|0'
   };
@@ -21,7 +22,7 @@ function hljsDefineTrig(hljs) {
   const IRI_TERM = {
     className: 'literal',
     relevance: 1, // XML tags look also like relative IRIs
-    begin: /<(?!\s)/,  // avoid shadowing operator in extensions (e.g. SPARQL)
+    begin: /<(?!\s|<)/,  // avoid shadowing operator in extensions (e.g. SPARQL)
     end: />/,
     illegal: /[\x00-\x20<>"{}|^`]/,
   };
@@ -46,14 +47,14 @@ function hljsDefineTrig(hljs) {
     className: 'symbol',
   };
 
-  const BLANK_NODE = {
+  const BLANK_NODE_TERM = {
     begin: BLANK_NODE_LABEL,
     relevance: 10,
     className: 'template-variable',
   };
 
   const LANGTAG = {
-    begin: /@[a-zA-Z]+([a-zA-Z0-9-]+)*/,
+    begin: /(?<=["'])@[a-zA-Z]+([a-zA-Z0-9-]+)*/,
     className: 'type',
     relevance: 5, // also catches objectivec keywords like: @protocol, @optional
   };
@@ -85,78 +86,76 @@ function hljsDefineTrig(hljs) {
   const NUMBER = Object.assign({}, hljs.C_NUMBER_MODE);
   NUMBER.relevance = 0;
 
-  const COMMON_TERMS = [
-      LANGTAG,
-      DATATYPE,
-      IRI_TERM,
-      BLANK_NODE,
-      PNAME,
-      TRIPLE_APOS_STRING, TRIPLE_QUOTE_STRING,
-      APOS_STRING_LITERAL, QUOTE_STRING_LITERAL,
-      NUMBER,
-      hljs.HASH_COMMENT_MODE,
+  const BLANK_NODE = {
+    begin: /[\[\]]/,
+    className: 'template-variable',
+    relevance: 0,
+  };
+
+  const LIST = {
+    begin: /[()]/,
+    className: 'subst',
+    relevance: 0,
+  };
+
+  const BLOCK = {
+    begin: /{|}/,
+    className: 'meta',
+    relevance: 0,
+  };
+
+  const PUNCTUATION = {
+    begin: /[.;,]/,
+    className: 'subst',
+    relevance: 0,
+  };
+
+  const REIFICATION = {
+    begin: /~|<<\(|\)>>|<<|>>|{\||\|}/,
+    className: 'subst',
+    relevance: 0,
+  };
+
+  const CONTAINS = [
+    LANGTAG,
+    DATATYPE,
+    IRI_TERM,
+    BLANK_NODE_TERM,
+    PNAME,
+    TRIPLE_APOS_STRING,
+    TRIPLE_QUOTE_STRING,
+    APOS_STRING_LITERAL,
+    QUOTE_STRING_LITERAL,
+    NUMBER,
+    hljs.HASH_COMMENT_MODE,
+    PUNCTUATION,
+    REIFICATION,
+    BLANK_NODE,
+    LIST,
+    BLOCK,
   ];
-
-  const REIFIED_TRIPLE = {
-    className: 'type',
-    relevance: 1,
-    begin: /<</,
-    contains: ['self'].concat(COMMON_TERMS),
-    end: />>/,
-    illegal: /["{}|^`]/,
-  };
-
-  const NAMED_ANNOT = {
-    begin: /~/,
-    className: 'built_in',
-    relevance: 0,
-  };
-
-  const ANNOTATION = {
-    className: 'type',
-    relevance: 0,
-    begin: /{\|/,
-    contains: [REIFIED_TRIPLE].concat(COMMON_TERMS).concat([
-      'self',
-      NAMED_ANNOT,
-    ]),
-    end: /\|}/,
-  };
-
-  const GRAPH_BLOCK = {
-    className: 'keyword',
-    relevance: 0,
-    begin: /{/,
-    contains: [REIFIED_TRIPLE].concat(COMMON_TERMS).concat([
-      ANNOTATION,
-      NAMED_ANNOT,
-    ]),
-    end: /}/,
-  };
 
   return {
     case_insensitive: true,
     keywords: KEYWORDS,
     aliases: ['trig', 'turtle', 'ttl', 'ntriples', 'nt', 'nquads', 'nq'],
-    contains: [REIFIED_TRIPLE].concat(COMMON_TERMS).concat([
-      ANNOTATION,
-      NAMED_ANNOT,
-      GRAPH_BLOCK,
-    ]),
+    contains: CONTAINS,
     exports: {
-      ANNOTATION,
-      NAMED_ANNOT,
-      REIFIED_TRIPLE,
       LANGTAG,
       DATATYPE,
       IRI_TERM,
-      BLANK_NODE,
+      BLANK_NODE_TERM,
       PNAME,
       TRIPLE_QUOTE_STRING,
       TRIPLE_APOS_STRING,
       QUOTE_STRING_LITERAL,
       APOS_STRING_LITERAL,
       NUMBER,
+      PUNCTUATION,
+      REIFICATION,
+      BLANK_NODE,
+      LIST,
+      BLOCK,
     }
   };
 }
